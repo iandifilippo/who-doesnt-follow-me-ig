@@ -109,9 +109,9 @@
   const KEYS = { cache: "qnms-cache-v5", excluded: "qnms-excluded-v2", seen: "qnms-seen-v2", lang: "qnms-lang" };
   // Ritmo conservador / Conservative pace
   const PACE = {
-    page: [1800, 3000],      // 1,8–3 s entre páginas de 50 cuentas / between pages of 50 accounts
-    breakEvery: 10,          // descanso cada 10 páginas / break every 10 pages
-    break: [20000, 30000],   // 20–30 s
+    page: [1000, 1800],      // 1–1,8 s entre páginas / between pages
+    breakEvery: 25,          // descanso cada 25 páginas / break every 25 pages
+    break: [8000, 12000],    // 8–12 s
     phase: [5000, 10000],    // entre leer tus seguidos y comprobarlos / between reading and checking
     checkBatch: 100,         // cuentas comprobadas por consulta / accounts checked per request
     cooldown: 60 * 60 * 1000,      // 1 h entre escaneos / between scans
@@ -296,8 +296,8 @@
       onProgress(map.size);
       console.log(`[qnms] ${kind}: ${map.size}`);
       if (maxId) {
-        // Ritmo prudente: 1,8–3 s entre páginas y 20–30 s de descanso cada 10 páginas.
-        // Careful pace: 1.8–3 s between pages and a 20–30 s break every 10 pages.
+        // Ritmo prudente: 1–1,8 s entre páginas y 8–12 s de descanso cada 25 páginas.
+        // Careful pace: 1–1.8 s between pages and an 8–12 s break every 25 pages.
         if (pages % PACE.breakEvery === 0) {
           const ms = between(PACE.break);
           setStatus(() => t().shortPause(Math.round(ms / 1000 / SPEED)));
@@ -326,7 +326,7 @@
         } else await sleep(between(PACE.page));
       }
       const chunk = ids.slice(i, i + PACE.checkBatch);
-      const d = await api("https://www.instagram.com/api/v1/friendships/show_many/", setStatus, 3,
+      const d = await api("https://www.instagram.com/api/v1/friendships/show_many/", setStatus, 1,
         "user_ids=" + encodeURIComponent(chunk.join(",")));
       const st = d.friendship_statuses || {};
       for (const id of chunk) {
@@ -434,7 +434,7 @@
         if (e.message !== "noCheck" && e.message !== "apiFail") throw e;
         // Plan B: si Instagram no responde la comprobación rápida, se leen tus seguidores como antes.
         // Fallback: if the quick check fails, read your followers like before.
-        console.warn("[qnms] quick check unavailable, reading followers instead", e);
+        console.warn("[qnms] quick check unavailable, reading followers instead", e.message, e.args || "");
         secondLabel = "followers";
         bars.second.lbl.textContent = t().followers;
         setStatus(() => t().readingFollowers);

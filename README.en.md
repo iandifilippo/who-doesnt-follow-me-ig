@@ -73,7 +73,7 @@ The notice always suggests changing your password, but that's a generic message.
 **What the scanner does to avoid it:**
 
 - **It only asks for what it needs**: it reads the accounts you follow (50 at a time) and then asks Instagram, 100 at a time, which ones follow you back. It never goes through your followers list, so it makes far fewer requests.
-- It goes **slowly on purpose**: 1.8–3 seconds between requests and a 20–30 second break every 10 requests.
+- It goes **slowly on purpose**: 1–1.8 seconds between requests and an 8–12 second break every 25 requests.
 - At Instagram's first sign that you're going too fast, it **stops** instead of retrying.
 - It **stops on its own** if Instagram shows the notice, instead of pushing on, and tells you what to do:
 

@@ -86,7 +86,7 @@ El aviso siempre sugiere cambiar la contraseña, pero es un mensaje genérico. E
 **Qué hace el escáner para evitarlo:**
 
 - **Solo consulta lo necesario**: lee las cuentas que sigues (de 50 en 50) y luego pregunta a Instagram, de 100 en 100, cuáles te siguen de vuelta. Nunca recorre tu lista de seguidores, así que hace muchas menos consultas.
-- Va **despacio a propósito**: espera entre 1,8 y 3 segundos entre cada consulta y descansa entre 20 y 30 segundos cada 10 consultas.
+- Va **despacio a propósito**: espera entre 1 y 1,8 segundos entre cada consulta y descansa entre 8 y 12 segundos cada 25 consultas.
 - Al primer aviso de Instagram de que vas muy rápido, **se detiene** en lugar de reintentar.
 - **Se detiene solo** si Instagram muestra el aviso, en vez de seguir insistiendo, y te explica qué hacer:
 
