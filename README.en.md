@@ -23,7 +23,7 @@ It compares the accounts you **follow** with the accounts that **follow you** an
 | 🔵 **You don't follow** | Accounts that follow you but you don't follow. |
 | ⚪ **Excluded** | Accounts you chose to ignore (your best friend, your favorite artist…). |
 
-You can also **search**, **sort**, **hide verified** accounts, mark the ones you've already **opened**, **copy the list** or **download it as CSV** (opens in Excel or Google Sheets).
+You can also **search**, **sort**, **hide verified** accounts, mark the ones you've already **opened** (those marks reset every time you paste the code again), **copy the list** or **download it as CSV** (opens in Excel or Google Sheets).
 
 ## 🚀 How to use it (1 minute)
 

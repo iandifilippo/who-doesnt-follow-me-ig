@@ -433,9 +433,13 @@
   }
 
   // ---------- Resultados / Results ----------
+  // Los perfiles abiertos solo se recuerdan mientras el panel está abierto: al volver a pegar
+  // el código todo aparece como la primera vez. / Opened profiles are only remembered while
+  // the panel is open: paste the code again and everything looks like the first time.
+  const seen = new Set();
+  try { localStorage.removeItem(KEYS.seen); } catch {} // borra marcas de versiones anteriores / clears marks from older versions
   function showResults(data) {
     const excluded = new Set(store.get(KEYS.excluded, []));
-    const seen = new Set(store.get(KEYS.seen, []));
     const st = { tab: "non", q: "", hideV: false, hideSeen: false, sort: "new", limit: 150 };
 
     const big = h("div", { class: "big" });
@@ -518,7 +522,7 @@
       const seenTag = h("span", { class: "tag seen" }, t().tagOpened);
       const mark = () => {
         if (seen.has(x.id)) return;
-        seen.add(x.id); store.set(KEYS.seen, [...seen]);
+        seen.add(x.id);
         li.classList.add("seen"); name.after(seenTag);
       };
       const img = h("img", { src: x.pic || null, alt: "", loading: "lazy", referrerpolicy: "no-referrer" });

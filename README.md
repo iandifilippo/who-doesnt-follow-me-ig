@@ -23,7 +23,7 @@ Compara las cuentas que **sigues** con las cuentas que **te siguen** y te muestr
 | 🔵 **No los sigues** | Cuentas que te siguen pero tú no sigues. |
 | ⚪ **Excluidos** | Cuentas que marcaste para ignorar (tu mejor amigo, tu artista favorito…). |
 
-Además puedes **buscar**, **ordenar**, **ocultar verificadas**, marcar las que ya **abriste**, **copiar la lista** o **descargarla en CSV** (para abrir en Excel o Google Sheets).
+Además puedes **buscar**, **ordenar**, **ocultar verificadas**, marcar las que ya **abriste** (esas marcas se borran cada vez que vuelves a pegar el código), **copiar la lista** o **descargarla en CSV** (para abrir en Excel o Google Sheets).
 
 ## 🚀 Cómo usarlo (1 minuto)
 
