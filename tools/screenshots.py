@@ -80,6 +80,8 @@ def handler(slow, checkpoint_after=None, quick_check=True):
             CALLS.append(url.split("instagram.com")[1].split("?")[0])
         p = urllib.parse.urlparse(url)
         q = urllib.parse.parse_qs(p.query)
+        if p.path.startswith("/mockpic/") and int(re.sub(r"\D", "", p.path) or 0) % 3 == 0:
+            return route.fulfill(status=403, body="")
         if p.path.startswith("/mockpic/"):
             return route.fulfill(body=avatar(p.path.split("/")[-1][:-4]), content_type="image/svg+xml")
         if p.path.startswith("/graphql/"):
@@ -112,7 +114,7 @@ def run():
     with sync_playwright() as pw:
         br = pw.chromium.launch()
         def page_for(locale, slow=False, checkpoint_after=None, quick_check=True):
-            ctx = br.new_context(viewport={"width": 1280, "height": 820}, device_scale_factor=2, locale=locale)
+            ctx = br.new_context(viewport={"width": 1440, "height": 900}, device_scale_factor=2, locale=locale)
             ctx.add_cookies([{"name": "ds_user_id", "value": "123456", "domain": "www.instagram.com", "path": "/"}])
             ctx.route("**/*", handler(slow, checkpoint_after, quick_check))
             # Acelera las pausas solo en esta simulación / speeds up pauses only in this simulation
@@ -132,13 +134,13 @@ def run():
         ctx, pg = page_for("es-CO")
         pg.evaluate(SCRIPT)
         CALLS.clear()
-        pg.wait_for_selector("#qnms .big", timeout=240000)
+        pg.wait_for_selector("#qnms .stat.main .n", timeout=240000)
         pg.wait_for_timeout(800)
-        assert pg.inner_text("#qnms .big") == "87", pg.inner_text("#qnms .big")
+        assert pg.inner_text("#qnms .stat.main .n") == "87", pg.inner_text("#qnms .stat.main .n")
         assert not any("followers" in c for c in CALLS), CALLS
         print("quick check ok:", len(CALLS), "requests,", sum("show_many" in c for c in CALLS), "checks")
         # marca un par como abiertos y excluye uno para que se vea vivo
-        pg.evaluate("""() => { const ls = [...document.querySelectorAll('#qnms li')];
+        pg.evaluate("""() => { const ls = [...document.querySelectorAll('#qnms .card')];
             ls[2]?.querySelector('a.u')?.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));
             ls[5]?.querySelector('a.u')?.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true})); }""")
         pg.screenshot(path=str(OUT / "resultados-es.png"))
@@ -154,14 +156,14 @@ def run():
         pg.wait_for_timeout(300)
         pg.locator("#qnms").screenshot(path=str(OUT / "buscar.png"))
         pg.fill("#qnms input[type=search]", "")
-        pg.evaluate("""() => { for (const i of [0, 1, 2]) document.querySelectorAll('#qnms li .acts button')[0]?.click(); }""")
+        pg.evaluate("""() => { for (const i of [0, 1, 2]) document.querySelectorAll('#qnms .card .acts button')[0]?.click(); }""")
         pg.click("#qnms .tabs button:nth-child(2)")
         pg.wait_for_timeout(300)
         pg.locator("#qnms").screenshot(path=str(OUT / "excluidos.png"))
-        pg.evaluate("""() => { for (const i of [0, 1, 2]) document.querySelectorAll('#qnms li .acts button')[0]?.click(); }""")
+        pg.evaluate("""() => { for (const i of [0, 1, 2]) document.querySelectorAll('#qnms .card .acts button')[0]?.click(); }""")
         pg.click("#qnms .tabs button:nth-child(1)")
         # Enfriamiento: volver a escanear enseguida muestra el aviso de 30 min
-        pg.click("#qnms .row2 button:nth-child(3)")
+        pg.click("#qnms .acts2 button:nth-child(3)")
         pg.wait_for_selector("#qnms .warn")
         assert "1 h" in pg.inner_text("#qnms .warn"), "cooldown missing"
         print("cooldown ok")
@@ -170,8 +172,8 @@ def run():
         # Plan B: sin comprobación rápida, lee los seguidores y da el mismo resultado
         ctx, pg = page_for("es-CO", quick_check=False)
         pg.evaluate(SCRIPT)
-        pg.wait_for_selector("#qnms .big", timeout=240000)
-        assert pg.inner_text("#qnms .big") == "87"
+        pg.wait_for_selector("#qnms .stat.main .n", timeout=240000)
+        assert pg.inner_text("#qnms .stat.main .n") == "87"
         print("fallback ok")
         ctx.close()
 
@@ -179,9 +181,9 @@ def run():
         for loc, name in [("es-CO", "aviso-es.png"), ("en-US", "notice-en.png")]:
             ctx, pg = page_for(loc, checkpoint_after=100)
             pg.evaluate(SCRIPT)
-            pg.wait_for_selector("#qnms .bd > .warn", timeout=240000)
+            pg.wait_for_selector("#qnms .box > .warn", timeout=240000)
             pg.locator("#qnms").screenshot(path=str(OUT / name))
-            print(name, pg.inner_text("#qnms .bd > .warn")[:80])
+            print(name, pg.inner_text("#qnms .box > .warn")[:80])
             ctx.close()
         br.close()
 

@@ -13,7 +13,7 @@ You paste it into your browser. Nothing to install, no passwords, and it's **rea
 
 ## ✨ What does it do?
 
-It checks **only the accounts you follow** and shows which ones don't follow you back, in a tidy panel. It doesn't need to read all your followers, so it's fast even if you have lots of them:
+It checks **only the accounts you follow** and shows which ones don't follow you back, in a full-screen dashboard with one card per account. It doesn't need to read all your followers, so it's fast even if you have lots of them:
 
 <img src="docs/results-en.png" alt="Results panel on top of Instagram" width="100%">
 
@@ -35,7 +35,7 @@ You can also **search**, **sort**, **hide verified** accounts, mark the ones you
    - Then click the **Console** tab.
 3. Open [`scanner.js`](scanner.js), click GitHub's **Copy raw file** button (📋), paste it into the console and press <kbd>Enter</kbd>.
 
-A panel appears on the right, reads the accounts you follow and checks which ones follow you:
+A full-screen dashboard opens on top of Instagram, reads the accounts you follow and checks which ones follow you:
 
 <img src="docs/escaneando.png" alt="Panel while scanning" width="100%">
 
@@ -95,7 +95,7 @@ No. It needs a desktop browser console (Chrome, Edge, Firefox, Brave, Safari…)
 <details>
 <summary><b>I have lots of followers — how long does it take?</b></summary>
 
-It only depends on how many accounts you follow, not on how many followers you have: following about 1,000 accounts takes around **2 minutes**, and 2,000 about 4. The panel shows an estimated time when it starts. You can minimize it with the **–** button and let it work.
+It only depends on how many accounts you follow, not on how many followers you have: following about 1,000 accounts takes around **2 minutes**, and 2,000 about 4. The panel shows an estimated time when it starts. You can minimize it with the **–** button to go back to Instagram while it works; a floating button brings it back.
 </details>
 
 <details>

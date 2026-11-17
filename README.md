@@ -13,7 +13,7 @@ Se pega en el navegador. No hay nada que instalar, no pide contraseñas y es **s
 
 ## ✨ ¿Qué hace?
 
-Revisa **solo las cuentas que tú sigues** y te muestra cuáles no te siguen de vuelta, en un panel ordenado. No necesita leer todos tus seguidores, así que es rápido aunque tengas muchos:
+Revisa **solo las cuentas que tú sigues** y te muestra cuáles no te siguen de vuelta, en un tablero a pantalla completa, con una tarjeta por cuenta. No necesita leer todos tus seguidores, así que es rápido aunque tengas muchos:
 
 <img src="docs/resultados-es.png" alt="Panel de resultados sobre Instagram" width="100%">
 
@@ -35,7 +35,7 @@ Además puedes **buscar**, **ordenar**, **ocultar verificadas**, marcar las que 
    - Luego haz clic en la pestaña **Console / Consola**.
 3. Abre [`scanner.js`](scanner.js), pulsa el botón **Copy raw file** (📋) de GitHub, pégalo en la consola y presiona <kbd>Enter</kbd>.
 
-Aparece un panel a la derecha que lee las cuentas que sigues y comprueba cuáles te siguen:
+Se abre un tablero a pantalla completa encima de Instagram que lee las cuentas que sigues y comprueba cuáles te siguen:
 
 <img src="docs/escaneando.png" alt="Panel escaneando las listas" width="100%">
 
@@ -108,7 +108,7 @@ No. Necesita la consola de un navegador de computador (Chrome, Edge, Firefox, Br
 <details>
 <summary><b>Tengo muchos seguidores, ¿cuánto se demora?</b></summary>
 
-Solo depende de cuántas cuentas sigues, no de cuántos seguidores tienes: siguiendo a unas 1.000 cuentas tarda alrededor de **2 minutos**, y siguiendo a 2.000, unos 4. El panel te muestra un tiempo estimado al empezar. Puedes minimizarlo con el botón **–** y dejarlo trabajando.
+Solo depende de cuántas cuentas sigues, no de cuántos seguidores tienes: siguiendo a unas 1.000 cuentas tarda alrededor de **2 minutos**, y siguiendo a 2.000, unos 4. El panel te muestra un tiempo estimado al empezar. Puedes minimizarlo con el botón **–** para volver a Instagram mientras trabaja; un botón flotante te deja abrirlo de nuevo.
 </details>
 
 <details>
