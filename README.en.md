@@ -13,14 +13,13 @@ You paste it into your browser. Nothing to install, no passwords, and it's **rea
 
 ## ✨ What does it do?
 
-It compares the accounts you **follow** with the accounts that **follow you** and shows you the difference in a tidy panel:
+It checks **only the accounts you follow** and shows which ones don't follow you back, in a tidy panel. It doesn't need to read all your followers, so it's fast even if you have lots of them:
 
 <img src="docs/results-en.png" alt="Results panel on top of Instagram" width="100%">
 
 | | |
 |---|---|
 | 🔴 **Not following back** | Accounts you follow that don't follow you back. |
-| 🔵 **You don't follow** | Accounts that follow you but you don't follow. |
 | ⚪ **Excluded** | Accounts you chose to ignore (your best friend, your favorite artist…). |
 
 You can also **search**, **sort**, **hide verified** accounts, mark the ones you've already **opened** (those marks reset every time you paste the code again), **copy the list** or **download it as CSV** (opens in Excel or Google Sheets).
@@ -36,7 +35,7 @@ You can also **search**, **sort**, **hide verified** accounts, mark the ones you
    - Then click the **Console** tab.
 3. Open [`scanner.js`](scanner.js), click GitHub's **Copy raw file** button (📋), paste it into the console and press <kbd>Enter</kbd>.
 
-A panel appears on the right and starts reading your lists:
+A panel appears on the right, reads the accounts you follow and checks which ones follow you:
 
 <img src="docs/escaneando.png" alt="Panel while scanning" width="100%">
 
@@ -61,7 +60,7 @@ A button in the panel's corner switches the language instantly, no re-scan neede
 
 ## 😱 Got "We suspect automated behavior on your account"?
 
-**Relax: it's not a ban, your account won't be deleted and nobody hacked you.** It's a preventive notice Instagram shows when it sees lots of requests in a row from your account, like the ones this scanner makes while reading your lists.
+**Relax: it's not a ban, your account won't be deleted and nobody hacked you.** It's a preventive notice Instagram shows when it sees lots of requests in a row from your account, like the ones this scanner makes while checking who you follow.
 
 **What to do:**
 
@@ -73,7 +72,8 @@ The notice always suggests changing your password, but that's a generic message.
 
 **What the scanner does to avoid it:**
 
-- It goes **slowly on purpose**: 1.8–3 seconds between each batch of 50 accounts, a 20–30 second break every 10 batches, and another pause between the following and followers lists.
+- **It only asks for what it needs**: it reads the accounts you follow (50 at a time) and then asks Instagram, 100 at a time, which ones follow you back. It never goes through your followers list, so it makes far fewer requests.
+- It goes **slowly on purpose**: 1.8–3 seconds between requests and a 20–30 second break every 10 requests.
 - At Instagram's first sign that you're going too fast, it **stops** instead of retrying.
 - It **stops on its own** if Instagram shows the notice, instead of pushing on, and tells you what to do:
 
@@ -95,7 +95,7 @@ No. It needs a desktop browser console (Chrome, Edge, Firefox, Brave, Safari…)
 <details>
 <summary><b>I have lots of followers — how long does it take?</b></summary>
 
-Since it goes slowly to keep your account safe, around 1,000 followers and 1,000 following takes about **3–4 minutes** (2,000 and 2,000, about 7). The panel shows an estimated time when it starts. You can minimize it with the **–** button and let it work.
+It only depends on how many accounts you follow, not on how many followers you have: following about 1,000 accounts takes around **2 minutes**, and 2,000 about 4. The panel shows an estimated time when it starts. You can minimize it with the **–** button and let it work.
 </details>
 
 <details>

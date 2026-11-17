@@ -70,9 +70,14 @@ body{margin:0;background:#fafafa;font-family:system-ui,sans-serif}
 <div class="post"><div class="h"><b></b><i></i></div><div class="img"></div></div>
 <div class="post"><div class="h"><b></b><i></i></div><div class="img"></div></div></div></body></html>"""
 
-def handler(slow, checkpoint_after=None):
+FOLLOWER_IDS = {u["pk"] for u in FOLLOWERS}
+CALLS = []
+
+def handler(slow, checkpoint_after=None, quick_check=True):
     def handle(route):
         url = route.request.url
+        if "/api/" in url:
+            CALLS.append(url.split("instagram.com")[1].split("?")[0])
         p = urllib.parse.urlparse(url)
         q = urllib.parse.parse_qs(p.query)
         if p.path.startswith("/mockpic/"):
@@ -81,6 +86,15 @@ def handler(slow, checkpoint_after=None):
             key = "edge_follow" if "3dec7e2c" in url else "edge_followed_by"
             n = len(FOLLOWING) if key == "edge_follow" else len(FOLLOWERS)
             return route.fulfill(json={"data": {"user": {key: {"count": n}}}, "status": "ok"})
+        if p.path == "/api/v1/friendships/show_many/":
+            if not quick_check:
+                return route.fulfill(status=404, json={"message": "not found", "status": "fail"})
+            ids = urllib.parse.parse_qs(route.request.post_data or "")["user_ids"][0].split(",")
+            assert len(ids) <= 100 and route.request.method == "POST"
+            n_checks = sum(1 for c in CALLS if c.endswith("show_many/"))
+            if checkpoint_after is not None and n_checks > 1:
+                return route.fulfill(status=400, json={"message": "checkpoint_required", "checkpoint_url": "/challenge/", "status": "fail"})
+            return route.fulfill(json={"friendship_statuses": {i: {"following": True, "followed_by": i in FOLLOWER_IDS} for i in ids}, "status": "ok"})
         m = re.match(r"/api/v1/friendships/\d+/(following|followers)/", p.path)
         if m:
             arr = FOLLOWING if m.group(1) == "following" else FOLLOWERS
@@ -97,10 +111,10 @@ def handler(slow, checkpoint_after=None):
 def run():
     with sync_playwright() as pw:
         br = pw.chromium.launch()
-        def page_for(locale, slow=False, checkpoint_after=None):
+        def page_for(locale, slow=False, checkpoint_after=None, quick_check=True):
             ctx = br.new_context(viewport={"width": 1280, "height": 820}, device_scale_factor=2, locale=locale)
             ctx.add_cookies([{"name": "ds_user_id", "value": "123456", "domain": "www.instagram.com", "path": "/"}])
-            ctx.route("**/*", handler(slow, checkpoint_after))
+            ctx.route("**/*", handler(slow, checkpoint_after, quick_check))
             # Acelera las pausas solo en esta simulación / speeds up pauses only in this simulation
             ctx.add_init_script("window.__qnmsSpeed = 0.04")
             pg = ctx.new_page()
@@ -110,15 +124,19 @@ def run():
         # 1) Escaneando (ES)
         ctx, pg = page_for("es-CO", slow=True)
         pg.evaluate(SCRIPT)
-        pg.wait_for_function("document.querySelector('#qnms .bar i') && parseFloat(document.querySelectorAll('#qnms .bar i')[0].style.width) > 60", timeout=240000)
+        pg.wait_for_function("document.querySelectorAll('#qnms .bar i').length == 2 && parseFloat(document.querySelectorAll('#qnms .bar i')[1].style.width) > 40", timeout=240000)
         pg.screenshot(path=str(OUT / "escaneando.png"))
         ctx.close()
 
         # 2) Resultados ES, 3) pestaña fans, 4) inglés
         ctx, pg = page_for("es-CO")
         pg.evaluate(SCRIPT)
+        CALLS.clear()
         pg.wait_for_selector("#qnms .big", timeout=240000)
         pg.wait_for_timeout(800)
+        assert pg.inner_text("#qnms .big") == "87", pg.inner_text("#qnms .big")
+        assert not any("followers" in c for c in CALLS), CALLS
+        print("quick check ok:", len(CALLS), "requests,", sum("show_many" in c for c in CALLS), "checks")
         # marca un par como abiertos y excluye uno para que se vea vivo
         pg.evaluate("""() => { const ls = [...document.querySelectorAll('#qnms li')];
             ls[2]?.querySelector('a.u')?.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));
@@ -136,14 +154,25 @@ def run():
         pg.wait_for_timeout(300)
         pg.locator("#qnms").screenshot(path=str(OUT / "buscar.png"))
         pg.fill("#qnms input[type=search]", "")
+        pg.evaluate("""() => { for (const i of [0, 1, 2]) document.querySelectorAll('#qnms li .acts button')[0]?.click(); }""")
         pg.click("#qnms .tabs button:nth-child(2)")
         pg.wait_for_timeout(300)
-        pg.locator("#qnms").screenshot(path=str(OUT / "no-los-sigues.png"))
+        pg.locator("#qnms").screenshot(path=str(OUT / "excluidos.png"))
+        pg.evaluate("""() => { for (const i of [0, 1, 2]) document.querySelectorAll('#qnms li .acts button')[0]?.click(); }""")
+        pg.click("#qnms .tabs button:nth-child(1)")
         # Enfriamiento: volver a escanear enseguida muestra el aviso de 30 min
         pg.click("#qnms .row2 button:nth-child(3)")
         pg.wait_for_selector("#qnms .warn")
         assert "1 h" in pg.inner_text("#qnms .warn"), "cooldown missing"
         print("cooldown ok")
+        ctx.close()
+
+        # Plan B: sin comprobación rápida, lee los seguidores y da el mismo resultado
+        ctx, pg = page_for("es-CO", quick_check=False)
+        pg.evaluate(SCRIPT)
+        pg.wait_for_selector("#qnms .big", timeout=240000)
+        assert pg.inner_text("#qnms .big") == "87"
+        print("fallback ok")
         ctx.close()
 
         # 5) Instagram muestra el aviso de "comportamiento automatizado": el escaneo se detiene

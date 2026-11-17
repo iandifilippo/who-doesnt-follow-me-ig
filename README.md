@@ -13,14 +13,13 @@ Se pega en el navegador. No hay nada que instalar, no pide contraseñas y es **s
 
 ## ✨ ¿Qué hace?
 
-Compara las cuentas que **sigues** con las cuentas que **te siguen** y te muestra la diferencia en un panel ordenado:
+Revisa **solo las cuentas que tú sigues** y te muestra cuáles no te siguen de vuelta, en un panel ordenado. No necesita leer todos tus seguidores, así que es rápido aunque tengas muchos:
 
 <img src="docs/resultados-es.png" alt="Panel de resultados sobre Instagram" width="100%">
 
 | | |
 |---|---|
 | 🔴 **No te siguen** | Cuentas que tú sigues pero no te siguen de vuelta. |
-| 🔵 **No los sigues** | Cuentas que te siguen pero tú no sigues. |
 | ⚪ **Excluidos** | Cuentas que marcaste para ignorar (tu mejor amigo, tu artista favorito…). |
 
 Además puedes **buscar**, **ordenar**, **ocultar verificadas**, marcar las que ya **abriste** (esas marcas se borran cada vez que vuelves a pegar el código), **copiar la lista** o **descargarla en CSV** (para abrir en Excel o Google Sheets).
@@ -36,7 +35,7 @@ Además puedes **buscar**, **ordenar**, **ocultar verificadas**, marcar las que 
    - Luego haz clic en la pestaña **Console / Consola**.
 3. Abre [`scanner.js`](scanner.js), pulsa el botón **Copy raw file** (📋) de GitHub, pégalo en la consola y presiona <kbd>Enter</kbd>.
 
-Aparece un panel a la derecha que va leyendo tus listas:
+Aparece un panel a la derecha que lee las cuentas que sigues y comprueba cuáles te siguen:
 
 <img src="docs/escaneando.png" alt="Panel escaneando las listas" width="100%">
 
@@ -54,11 +53,11 @@ Un botón en la esquina del panel cambia el idioma al instante, sin volver a esc
 <table>
 <tr>
 <td width="50%"><img src="docs/buscar.png" alt="Búsqueda por nombre"></td>
-<td width="50%"><img src="docs/no-los-sigues.png" alt="Pestaña No los sigues"></td>
+<td width="50%"><img src="docs/excluidos.png" alt="Pestaña Excluidos"></td>
 </tr>
 <tr>
 <td align="center">Busca por usuario o por nombre</td>
-<td align="center">Mira quién te sigue y tú no</td>
+<td align="center">Excluye a quien quieras ignorar</td>
 </tr>
 </table>
 
@@ -74,7 +73,7 @@ Un botón en la esquina del panel cambia el idioma al instante, sin volver a esc
 
 ## 😱 ¿Te salió «We suspect automated behavior on your account»?
 
-**Tranquilo: no es un baneo, no te van a borrar la cuenta y nadie te hackeó.** Es un aviso preventivo que Instagram muestra cuando ve muchas consultas seguidas desde tu cuenta, como las que hace este escáner al leer tus listas.
+**Tranquilo: no es un baneo, no te van a borrar la cuenta y nadie te hackeó.** Es un aviso preventivo que Instagram muestra cuando ve muchas consultas seguidas desde tu cuenta, como las que hace este escáner al revisar tus seguidos.
 
 **Qué hacer:**
 
@@ -86,7 +85,8 @@ El aviso siempre sugiere cambiar la contraseña, pero es un mensaje genérico. E
 
 **Qué hace el escáner para evitarlo:**
 
-- Va **despacio a propósito**: espera entre 1,8 y 3 segundos entre cada bloque de 50 cuentas, descansa entre 20 y 30 segundos cada 10 bloques y hace otra pausa entre la lista de seguidos y la de seguidores.
+- **Solo consulta lo necesario**: lee las cuentas que sigues (de 50 en 50) y luego pregunta a Instagram, de 100 en 100, cuáles te siguen de vuelta. Nunca recorre tu lista de seguidores, así que hace muchas menos consultas.
+- Va **despacio a propósito**: espera entre 1,8 y 3 segundos entre cada consulta y descansa entre 20 y 30 segundos cada 10 consultas.
 - Al primer aviso de Instagram de que vas muy rápido, **se detiene** en lugar de reintentar.
 - **Se detiene solo** si Instagram muestra el aviso, en vez de seguir insistiendo, y te explica qué hacer:
 
@@ -108,7 +108,7 @@ No. Necesita la consola de un navegador de computador (Chrome, Edge, Firefox, Br
 <details>
 <summary><b>Tengo muchos seguidores, ¿cuánto se demora?</b></summary>
 
-Como va despacio para cuidar tu cuenta, con unos 1.000 seguidores y 1.000 seguidos tarda alrededor de **3 a 4 minutos** (con 2.000 y 2.000, unos 7). El panel te muestra un tiempo estimado al empezar. Puedes minimizarlo con el botón **–** y dejarlo trabajando.
+Solo depende de cuántas cuentas sigues, no de cuántos seguidores tienes: siguiendo a unas 1.000 cuentas tarda alrededor de **2 minutos**, y siguiendo a 2.000, unos 4. El panel te muestra un tiempo estimado al empezar. Puedes minimizarlo con el botón **–** y dejarlo trabajando.
 </details>
 
 <details>

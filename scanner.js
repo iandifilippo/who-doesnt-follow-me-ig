@@ -1,4 +1,4 @@
-// Who doesn't follow me? / ¿Quién no me sigue? — v7
+// Who doesn't follow me? / ¿Quién no me sigue? — v8
 // Escáner de seguidores para Instagram que se pega en la consola del navegador.
 // Unfollower scanner for Instagram that you paste into the browser console.
 //
@@ -22,6 +22,8 @@
       offline: "sin conexión",
       readingFollowing: "Leyendo las cuentas que sigues…",
       readingFollowers: "Leyendo tus seguidores…",
+      checking: "Comprobando quién te sigue de vuelta…",
+      checked: "Comprobados",
       shortPause: (n) => `Pausa para cuidar tu cuenta (${n} s)…`,
       calm: "Vamos despacio a propósito para cuidar tu cuenta. Si Instagram muestra un aviso de «comportamiento automatizado», no te asustes: no es un bloqueo y tu cuenta no se borra. Ciérralo, recarga la página y espera unas horas antes de volver a escanear.",
       eta: (m) => `Tiempo estimado: unos ${m} min. Puedes minimizar el panel (–) y dejarlo trabajando.`,
@@ -30,16 +32,14 @@
       cooldown: (ago) => `Tu último escaneo fue hace ${ago}. Para no llamar la atención de Instagram, conviene esperar al menos 1 hora entre escaneos.`,
       seeSaved: "Ver resultados guardados", scanAnyway: "Escanear de todos modos",
       preparing: "Preparando…",
-      intro: "Leyendo tus listas desde Instagram. Solo lectura: no se sigue ni se deja de seguir a nadie.",
+      intro: "Revisando las cuentas que sigues. Solo lectura: no se sigue ni se deja de seguir a nadie.",
       following: "Seguidos", followers: "Seguidores",
       cancel: "Cancelar", cancelled: "Escaneo cancelado.", startOver: "Empezar de nuevo", rescan: "Volver a escanear",
-      meta: (f, fl, m) => `Sigues a ${f}, te siguen ${fl}, ${m} mutuos. `,
+      meta: (f, m) => `Sigues a ${f} cuentas; ${m} te siguen de vuelta. `,
       scannedNow: "Escaneado ahora mismo.",
       scannedAgo: (a) => `Escaneado hace ${a}.`, days: "días",
-      warnFollowers: (g, e) => `Instagram entregó ${g} de tus ${e} seguidores. Algunas cuentas podrían aparecer por error en "No te siguen"; conviene volver a escanear más tarde.`,
       warnFollowing: (g, e) => `Instagram entregó ${g} de las ${e} cuentas que sigues.`,
       tabNon: (n) => `No te siguen (${n})`,
-      tabFans: (n) => `No los sigues (${n})`,
       tabExc: (n) => `Excluidos (${n})`,
       search: "Buscar por usuario o nombre",
       sortNew: "Seguidos más recientemente", sortOld: "Seguidos hace más tiempo", sortAz: "Alfabético",
@@ -47,11 +47,11 @@
       copy: "Copiar lista", csv: "Descargar CSV",
       copied: "Lista copiada.", copyFail: "No se pudo copiar automáticamente. La lista quedó impresa en la consola.",
       csvHead: "usuario,nombre,verificada,privada,perfil", yes: "sí", no: "no",
-      files: { non: "no-me-siguen", fans: "no-los-sigo", exc: "excluidos" },
+      files: { non: "no-me-siguen", exc: "excluidos" },
       tagOpened: "Abierto", tagVerified: "Verificada", tagPrivate: "Privada",
       open: "Abrir", exclude: "Excluir", restore: "Restaurar",
       emptyFilter: "Ninguna cuenta coincide con los filtros.",
-      empty: { non: "Todas las cuentas que sigues te siguen de vuelta.", fans: "Sigues a todas las cuentas que te siguen.", exc: "No has excluido ninguna cuenta." },
+      empty: { non: "Todas las cuentas que sigues te siguen de vuelta.", exc: "No has excluido ninguna cuenta." },
       more: (n) => `Mostrar más (${n} restantes)`,
       bigOne: "cuenta que sigues no te sigue de vuelta.",
       bigMany: "cuentas que sigues no te siguen de vuelta.",
@@ -68,6 +68,8 @@
       offline: "offline",
       readingFollowing: "Reading the accounts you follow…",
       readingFollowers: "Reading your followers…",
+      checking: "Checking who follows you back…",
+      checked: "Checked",
       shortPause: (n) => `Pausing to keep your account safe (${n} s)…`,
       calm: "We go slowly on purpose to keep your account safe. If Instagram shows a \"suspected automated behavior\" notice, don't panic: it's not a ban and your account won't be deleted. Dismiss it, reload the page and wait a few hours before scanning again.",
       eta: (m) => `Estimated time: about ${m} min. You can minimize the panel (–) and let it work.`,
@@ -76,16 +78,14 @@
       cooldown: (ago) => `Your last scan was ${ago} ago. To avoid drawing Instagram's attention, wait at least 1 hour between scans.`,
       seeSaved: "See saved results", scanAnyway: "Scan anyway",
       preparing: "Getting ready…",
-      intro: "Reading your lists from Instagram. Read-only: nobody gets followed or unfollowed.",
+      intro: "Checking the accounts you follow. Read-only: nobody gets followed or unfollowed.",
       following: "Following", followers: "Followers",
       cancel: "Cancel", cancelled: "Scan cancelled.", startOver: "Start over", rescan: "Scan again",
-      meta: (f, fl, m) => `You follow ${f}, ${fl} follow you, ${m} mutual. `,
+      meta: (f, m) => `You follow ${f} accounts; ${m} follow you back. `,
       scannedNow: "Scanned just now.",
       scannedAgo: (a) => `Scanned ${a} ago.`, days: "days",
-      warnFollowers: (g, e) => `Instagram returned ${g} of your ${e} followers. Some accounts might show up by mistake under "Not following back"; try scanning again later.`,
       warnFollowing: (g, e) => `Instagram returned ${g} of the ${e} accounts you follow.`,
       tabNon: (n) => `Not following back (${n})`,
-      tabFans: (n) => `You don't follow (${n})`,
       tabExc: (n) => `Excluded (${n})`,
       search: "Search by username or name",
       sortNew: "Most recently followed", sortOld: "Followed longest ago", sortAz: "Alphabetical",
@@ -93,11 +93,11 @@
       copy: "Copy list", csv: "Download CSV",
       copied: "List copied.", copyFail: "Couldn't copy automatically. The list was printed to the console.",
       csvHead: "username,name,verified,private,profile", yes: "yes", no: "no",
-      files: { non: "not-following-back", fans: "i-dont-follow", exc: "excluded" },
+      files: { non: "not-following-back", exc: "excluded" },
       tagOpened: "Opened", tagVerified: "Verified", tagPrivate: "Private",
       open: "Open", exclude: "Exclude", restore: "Restore",
       emptyFilter: "No accounts match the filters.",
-      empty: { non: "Everyone you follow follows you back.", fans: "You follow everyone who follows you.", exc: "You haven't excluded any accounts." },
+      empty: { non: "Everyone you follow follows you back.", exc: "You haven't excluded any accounts." },
       more: (n) => `Show more (${n} left)`,
       bigOne: "account you follow doesn't follow you back.",
       bigMany: "accounts you follow don't follow you back.",
@@ -106,18 +106,20 @@
   };
 
   const APP_ID = "936619743392459";
-  const KEYS = { cache: "qnms-cache-v4", excluded: "qnms-excluded-v2", seen: "qnms-seen-v2", lang: "qnms-lang" };
+  const KEYS = { cache: "qnms-cache-v5", excluded: "qnms-excluded-v2", seen: "qnms-seen-v2", lang: "qnms-lang" };
   // Ritmo conservador / Conservative pace
   const PACE = {
     page: [1800, 3000],      // 1,8–3 s entre páginas de 50 cuentas / between pages of 50 accounts
     breakEvery: 10,          // descanso cada 10 páginas / break every 10 pages
     break: [20000, 30000],   // 20–30 s
-    phase: [10000, 20000],   // entre "seguidos" y "seguidores" / between following and followers
+    phase: [5000, 10000],    // entre leer tus seguidos y comprobarlos / between reading and checking
+    checkBatch: 100,         // cuentas comprobadas por consulta / accounts checked per request
     cooldown: 60 * 60 * 1000,      // 1 h entre escaneos / between scans
     cacheAge: 6 * 60 * 60 * 1000,  // resultados guardados 6 h / saved results for 6 h
   };
   const SPEED = Number(window.__qnmsSpeed) || 1; // solo para pruebas / tests only
   const between = ([a, b]) => (a + Math.random() * (b - a)) * SPEED;
+  try { localStorage.removeItem("qnms-cache-v4"); } catch {} // caché de versiones anteriores / old cache
   const uid = (document.cookie.match(/(?:^|; )ds_user_id=(\d+)/) || [])[1];
 
   // ---------- Utilidades / Utilities ----------
@@ -246,12 +248,15 @@
   }
 
   // ---------- Peticiones a Instagram / Instagram requests ----------
-  async function api(url, setStatus, maxAttempts = 3) {
+  const csrf = () => (document.cookie.match(/(?:^|; )csrftoken=([^;]+)/) || [])[1] || "";
+  async function api(url, setStatus, maxAttempts = 3, body = null) {
     for (let attempt = 1; ; attempt++) {
       if (cancelled) throw new Cancel();
       let res = null;
       try {
-        res = await fetch(url, { headers: { "x-ig-app-id": APP_ID, "x-requested-with": "XMLHttpRequest" }, credentials: "include" });
+        const headers = { "x-ig-app-id": APP_ID, "x-requested-with": "XMLHttpRequest" };
+        if (body) Object.assign(headers, { "x-csrftoken": csrf(), "content-type": "application/x-www-form-urlencoded" });
+        res = await fetch(url, { method: body ? "POST" : "GET", headers, body, credentials: "include" });
       } catch { /* sin conexión / offline */ }
       const j = res ? await res.json().catch(() => null) : null;
       if (res && res.ok && j && j.status !== "fail") return j;
@@ -306,6 +311,33 @@
     return [...map.values()];
   }
 
+  // Pregunta a Instagram, en grupos de 100, si cada cuenta que sigues te sigue de vuelta.
+  // Mucho más rápido que leer todos tus seguidores. / Asks Instagram, 100 at a time, whether each
+  // account you follow follows you back. Much faster than reading all your followers.
+  async function checkBack(ids, onProgress, setStatus) {
+    const back = new Map();
+    for (let i = 0, n = 0; i < ids.length; i += PACE.checkBatch, n++) {
+      if (n) {
+        if (n % PACE.breakEvery === 0) {
+          const ms = between(PACE.break);
+          setStatus(() => t().shortPause(Math.round(ms / 1000 / SPEED)));
+          await sleep(ms);
+          setStatus(() => t().checking);
+        } else await sleep(between(PACE.page));
+      }
+      const chunk = ids.slice(i, i + PACE.checkBatch);
+      const d = await api("https://www.instagram.com/api/v1/friendships/show_many/", setStatus, 3,
+        "user_ids=" + encodeURIComponent(chunk.join(",")));
+      const st = d.friendship_statuses || {};
+      for (const id of chunk) {
+        if (!st[id] || typeof st[id].followed_by !== "boolean") throw new Error("noCheck");
+        back.set(id, st[id].followed_by);
+      }
+      onProgress(Math.min(ids.length, i + chunk.length));
+    }
+    return back;
+  }
+
   const errText = (e) => (e.message === "sessionErr" ? t().sessionErr
     : e.message === "igWarn" ? t().igWarn
     : e.message === "slowDown" ? t().slowDown
@@ -335,11 +367,14 @@
     const last = {};
     let etaMin = null;
     const eta = tr(h("p", { class: "muted", style: "font-size:12.5px" }), (el) => { el.textContent = etaMin ? t().eta(nf(etaMin)) : ""; });
+    let secondLabel = "checked";
     const progressRow = (key) => {
       const num = h("span", {}, "0"), tot = h("span", { class: "muted" }), fill = h("i");
       bars[key] = { num, tot, fill };
+      const lbl = key === "following" ? T("span", key) : tr(h("span"), (el) => { el.textContent = t()[secondLabel]; });
+      bars[key].lbl = lbl;
       return h("div", {},
-        h("div", { style: "display:flex;justify-content:space-between" }, T("span", key), h("span", {}, num, tot)),
+        h("div", { style: "display:flex;justify-content:space-between" }, lbl, h("span", {}, num, tot)),
         h("div", { class: "bar" }, fill));
     };
     const update = (key, n, total) => {
@@ -355,7 +390,7 @@
       T("p", "intro"),
       T("p", "calm", { class: "muted", style: "font-size:12.5px" }),
       progressRow("following"),
-      progressRow("followers"),
+      progressRow("second"),
       status,
       eta,
       T("button", "cancel", { onclick: () => { cancelled = true; } })
@@ -371,14 +406,10 @@
           const j = await r.json();
           return j?.data?.user?.[key]?.count ?? null;
         };
-        info = {
-          following: await count("3dec7e2c57367ef3da3d987d89f9dbc8", "edge_follow"),
-          _: await sleep(between([2000, 4000])),
-          followers: await count("c76146de99bb02f6415203be841dd25a", "edge_followed_by"),
-        };
+        info = { following: await count("3dec7e2c57367ef3da3d987d89f9dbc8", "edge_follow") };
         console.log("[qnms] totals:", info);
-        if (info.following != null && info.followers != null) {
-          const pages = Math.ceil(info.following / 50) + Math.ceil(info.followers / 50);
+        if (info.following != null) {
+          const pages = Math.ceil(info.following / 50) + Math.ceil(info.following / PACE.checkBatch);
           const avg = (x) => (x[0] + x[1]) / 2;
           const secs = pages * avg(PACE.page) / 1000 + Math.floor(pages / PACE.breakEvery) * avg(PACE.break) / 1000 + avg(PACE.phase) / 1000;
           etaMin = Math.max(1, Math.round(secs / 60));
@@ -388,17 +419,30 @@
 
       setStatus(() => t().readingFollowing);
       const following = await getAll("following", (n) => update("following", n, info?.following), setStatus);
-      setStatus(() => t().readingFollowers);
       {
         const ms = between(PACE.phase);
         setStatus(() => t().shortPause(Math.round(ms / 1000 / SPEED)));
         await sleep(ms);
-        setStatus(() => t().readingFollowers);
       }
-      const followers = await getAll("followers", (n) => update("followers", n, info?.followers), setStatus);
+      const ids = following.map(idOf);
+      let followsBack;
+      try {
+        setStatus(() => t().checking);
+        const back = await checkBack(ids, (n) => update("second", n, ids.length), setStatus);
+        followsBack = (id) => back.get(id) === true;
+      } catch (e) {
+        if (e.message !== "noCheck" && e.message !== "apiFail") throw e;
+        // Plan B: si Instagram no responde la comprobación rápida, se leen tus seguidores como antes.
+        // Fallback: if the quick check fails, read your followers like before.
+        console.warn("[qnms] quick check unavailable, reading followers instead", e);
+        secondLabel = "followers";
+        bars.second.lbl.textContent = t().followers;
+        setStatus(() => t().readingFollowers);
+        const followers = await getAll("followers", (n) => update("second", n, null), setStatus);
+        const set = new Set(followers.map(idOf));
+        followsBack = (id) => set.has(id);
+      }
 
-      const followerIds = new Set(followers.map(idOf));
-      const followingIds = new Set(following.map(idOf));
       const slim = (u, i) => ({
         id: idOf(u), u: u.username, n: u.full_name || "", v: !!u.is_verified, p: !!u.is_private,
         pic: u.profile_pic_url || "", i,
@@ -406,15 +450,12 @@
 
       const data = {
         uid, at: Date.now(), expected: info,
-        counts: { following: following.length, followers: followers.length },
-        mutual: following.filter((u) => followerIds.has(idOf(u))).length,
-        nonFollowers: following.map(slim).filter((x) => !followerIds.has(x.id)),
-        fans: followers.map(slim).filter((x) => !followingIds.has(x.id)),
+        counts: { following: following.length },
+        mutual: ids.filter(followsBack).length,
+        nonFollowers: following.map(slim).filter((x) => !followsBack(x.id)),
       };
 
-      // Caché (sin fotos de los "fans" para no llenar el almacenamiento)
-      // Cache (without "fans" photos so storage doesn't fill up)
-      store.set(KEYS.cache, { ...data, fans: data.fans.map(({ pic, ...rest }) => rest) });
+      store.set(KEYS.cache, data);
       console.log(t().done(data.nonFollowers.length));
       showResults(data);
     } catch (e) {
@@ -449,13 +490,10 @@
 
     const paintStatic = () => {
       const mins = Math.round((Date.now() - data.at) / 60000);
-      meta.textContent = t().meta(nf(data.counts.following), nf(data.counts.followers), nf(data.mutual)) +
+      meta.textContent = t().meta(nf(data.counts.following), nf(data.mutual)) +
         (mins < 1 ? t().scannedNow : t().scannedAgo(ago(mins)));
       const warnings = [];
       const exp = data.expected;
-      if (exp && exp.followers && data.counts.followers < exp.followers * 0.97) {
-        warnings.push(t().warnFollowers(nf(data.counts.followers), nf(exp.followers)));
-      }
       if (exp && exp.following && data.counts.following < exp.following * 0.97) {
         warnings.push(t().warnFollowing(nf(data.counts.following), nf(exp.following)));
       }
@@ -466,7 +504,7 @@
 
     const tabs = {};
     const mkTab = (key) => (tabs[key] = h("button", { onclick: () => { st.tab = key; st.limit = 150; render(); } }));
-    const tabsEl = h("div", { class: "tabs" }, mkTab("non"), mkTab("fans"), mkTab("exc"));
+    const tabsEl = h("div", { class: "tabs" }, mkTab("non"), mkTab("exc"));
 
     const search = h("input", { type: "search" });
     search.addEventListener("input", () => { st.q = search.value.trim().toLowerCase().replace(/^@/, ""); st.limit = 150; render(); });
@@ -487,8 +525,7 @@
 
     const current = () => {
       let arr;
-      if (st.tab === "fans") arr = data.fans;
-      else if (st.tab === "exc") arr = data.nonFollowers.filter((x) => excluded.has(x.id));
+      if (st.tab === "exc") arr = data.nonFollowers.filter((x) => excluded.has(x.id));
       else arr = data.nonFollowers.filter((x) => !excluded.has(x.id));
       if (st.q) arr = arr.filter((x) => x.u.toLowerCase().includes(st.q) || x.n.toLowerCase().includes(st.q));
       if (st.hideV) arr = arr.filter((x) => !x.v);
@@ -534,7 +571,7 @@
         x.p && h("span", { class: "tag" }, t().tagPrivate),
         x.n && h("span", { class: "fn" }, x.n));
       const acts = h("div", { class: "acts" }, h("a", { class: "btn pri", href: url, target: "_blank", rel: "noopener", onclick: mark }, t().open));
-      if (st.tab !== "fans") {
+      {
         acts.append(h("button", {
           onclick: () => {
             excluded.has(x.id) ? excluded.delete(x.id) : excluded.add(x.id);
@@ -553,7 +590,6 @@
       big.textContent = nf(nonCount);
       bigTxt.textContent = nonCount === 1 ? t().bigOne : t().bigMany;
       tabs.non.textContent = t().tabNon(nf(nonCount));
-      tabs.fans.textContent = t().tabFans(nf(data.fans.length));
       tabs.exc.textContent = t().tabExc(nf(excCount));
       for (const [k, b] of Object.entries(tabs)) b.classList.toggle("on", k === st.tab);
 
